@@ -14,7 +14,6 @@ var nodeToUse = '';
 var delayBlock = 0;
 var t = new tail("../lisk-main/logs/lisk.log");
 var pauseReload = false;
-//var t = new tail("../lisk-test/logs/lisk.log");
 var x = 0;
 var postOptions = {
     uri: 'http://'+ config.node +'/api/delegates/forging/enable',
@@ -51,7 +50,6 @@ var chooseNode = function() {
                         break;
                     }
                 }
-                //checkNodeToUse = data.peers[0].ip + ':8000';
                 request('http://' + checkNodeToUse + '/api/peers?state=2&orderBy=height:desc', function (error, response, body) {
                     if (!error && response.statusCode == 200 && body!='Forbidden') {
                         nodeToUse = checkNodeToUse
@@ -61,7 +59,7 @@ var chooseNode = function() {
                     }
                 });
             } else {
-                reject('testnet.lisk.io has some problem');
+                reject(config.nodeToCompareWith +' has some problem');
             }
         });
     });
