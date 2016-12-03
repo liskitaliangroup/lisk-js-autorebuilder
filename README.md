@@ -1,5 +1,5 @@
 #Lisk Anti-Stuck in js
-**** NOT USE IT BEFORE STARTING FORGING ****
+**** NOT USE IT BEFORE YOU ARE GREEN AND ALREDY FORGING ****
 
 The script will check if your delegate is forging, if not it will rebuild with last available snapshot and activate the forging ones the sync is completed.
 
@@ -14,11 +14,11 @@ Clone the repository in the same directory of lisk installation folder, for inst
 
 ```
 /HOME DIRECTORY
-    /lisk-test
+    /lisk-main
     /lisk-js-autorebuilder
 ```
 
-In the lisk-test/main folder check if 127.0.0.1 is whitelisted in the forging section in the config.json
+In the lisk-main folder check if 127.0.0.1 is whitelisted in the forging section in the config.json
 
 Fore the autorebuilder do as follow:
 
