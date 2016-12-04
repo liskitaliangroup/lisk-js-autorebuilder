@@ -11,6 +11,8 @@ var forkString = 'Fork';
 var forgeString = 'Forged';
 var consString = 'consensus';
 var rebuildString = 'Finished sync';
+var inadequateString = 'Inadequate';
+var forgingString = 'Forging enabled';
 
 // foring monitoring
 var alerted = {};
@@ -20,14 +22,10 @@ var pauseReload = false;
 var x = 0;
 
 // switch forging server
-
-var postOptions = {
-    uri: 'http://'+ config.node +'/api/delegates/forging/enable',
-    method: 'POST',
-    json: {
-        "secret": ""+ config.secret +""
-    }
-};
+if(config.master)
+    var inadequate = false;
+else
+    var inadequate = true;
 
 var checklHeight = function(node) {
     return new Promise(function (resolve, reject) {
@@ -71,11 +69,37 @@ var chooseNode = function() {
     });
 };
 
-var enableForging = function() {
+var enableForging = function(node) {
     return new Promise(function (resolve, reject) {
+        var postOptions = {
+            uri: 'http://'+ node +'/api/delegates/forging/enable',
+            method: 'POST',
+            json: {
+                "secret": ""+ config.secret +""
+            }
+        };
         request(postOptions, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 resolve('Forging enabled');
+            } else {
+                reject(error);
+            }
+        });
+    });
+};
+
+var disableForging = function(node) {
+    return new Promise(function (resolve, reject) {
+        var postOptions = {
+            uri: 'http://'+ node +'/api/delegates/forging/disable',
+            method: 'POST',
+            json: {
+                "secret": ""+ config.secret +""
+            }
+        };
+        request(postOptions, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                resolve('Forging disabled');
             } else {
                 reject(error);
             }
@@ -100,14 +124,45 @@ t.on("line", data => {
         console.log(data+"\n");
     }
     if(log.indexOf(rebuildString) !== -1) {
-        console.log("[" + new Date().toString() + "] | Sync finished, enabling forging");
-        pauseReload = false;
-        enableForging().then(function(res) {
+        console.log("[" + new Date().toString() + "] | Sync finished");
+        if(inadequate == false) {
+            pauseReload = false;
+            enableForging(config.node).then(function(res) {
+                console.log("[" + new Date().toString() + "] | " + res + "\n");
+            }, function (err) {
+                console.log(err)
+            })
+        }
+    };
+    if(log.indexOf(inadequateString) !== -1) {
+        console.log("[" + new Date().toString() + "] | Inadequate found, switch forging");
+        //pauseReload = false;
+        inadequate = true;
+        // disable forging
+        disableForging(config.node).then(function(res){
             console.log("[" + new Date().toString() + "] | " + res + "\n");
+            enableForging(config.backUpNode).then(function(res) {
+                    console.log("[" + new Date().toString() + "] | " + res + "\n");
+                }, function (err) {
+                    console.log(err)
+                }
+            )
         }, function (err) {
             console.log(err)
-        }
-    )};
+        })
+
+    };
+    if(log.indexOf(forgingString) !== -1) {
+        console.log("[" + new Date().toString() + "] | Forging has been activeted, I am master");
+        //pauseReload = false;
+        inadequate = false;
+        enableForging(config.backUpNode).then(function(res) {
+                console.log("[" + new Date().toString() + "] | " + res + "\n");
+            }, function (err) {
+                console.log(err)
+            }
+        )
+    };
 });
 
 // check if I'm delegateMonitor delegate is forging
