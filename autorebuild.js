@@ -1,20 +1,24 @@
+// libs
 var tail = require('tail').Tail;
 var exec = require('child_process');
 var request = require ('request');
 var config = require('./config.json');
 
-var log;
+// logs
+var t = new tail("../lisk-main/logs/lisk.log");
+var log = '';
 var forkString = 'Fork';
 var forgeString = 'Forged';
 var consString = 'consensus';
 var rebuildString = 'Finished sync';
-var delegateMonitor = config.delegate;
+
+// foring monitoring
 var alerted = {};
 var nodeToUse = '';
-var delayBlock = 0;
-var t = new tail("../lisk-main/logs/lisk.log");
+var delegateMonitor = config.delegate;
 var pauseReload = false;
 var x = 0;
+
 var postOptions = {
     uri: 'http://'+ config.node +'/api/delegates/forging/enable',
     method: 'POST',
@@ -152,6 +156,7 @@ var checkBlocks = function() {
                                                         console.log('exec error: ' + error);
                                                     }
                                                 });
+                                                pauseReload = true;
                                             }
                                         }
                                     } else {
