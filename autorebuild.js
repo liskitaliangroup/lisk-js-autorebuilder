@@ -150,13 +150,13 @@ var checkBlocks = function() {
                                                 // if is red rebuild and wait 30 min before rebuilding again
                                                 console.log("\n[" + new Date().toString() + "] | Asked to: " + nodeToUse);
                                                 console.log("[" + new Date().toString() + "] | Autorebuild started");
+                                                pauseReload = true;
                                                 exec.exec('bash ../lisk-main/lisk.sh rebuild -u https://snapshot.lisknode.io',function (error, stdout, stderr) {
                                                     console.log(stdout);
                                                     if (error !== null) {
                                                         console.log('exec error: ' + error);
                                                     }
                                                 });
-                                                pauseReload = true;
                                             }
                                         }
                                     } else {
@@ -192,13 +192,13 @@ var checkReload = function() {
                 if((choosedNode - res)>=4) {
                     console.log("\n[" + new Date().toString() + "] | Height difference > 4");
                     console.log("[" + new Date().toString() + "] | Reload Lisk");
+                    pauseReload = true;
                     exec.exec('bash ../lisk-main/lisk.sh reload',function (error, stdout, stderr) {
                         console.log(stdout);
                         if (error !== null) {
                             console.log('exec error: ' + error);
                         }
                     });
-                    pauseReload = true;
                 }
             }, function (err) {
                 console.log("[" + new Date().toString() + "] | " + err)
