@@ -19,6 +19,8 @@ var delegateMonitor = config.delegate;
 var pauseReload = false;
 var x = 0;
 
+// switch forging server
+
 var postOptions = {
     uri: 'http://'+ config.node +'/api/delegates/forging/enable',
     method: 'POST',
