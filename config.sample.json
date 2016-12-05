@@ -1,5 +1,5 @@
 {
-	"nodeToCompareWith":"45.32.224.205:8000",
+	"nodeToCompareWith":"83.136.249.129:7000",
 	"node": "localhost:8000",
     "delegate":"nameOfYourDelegate",
 	"secret":"superSecretPasswd",
