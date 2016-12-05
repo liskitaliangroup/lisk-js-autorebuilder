@@ -1,6 +1,6 @@
 {
 	"nodeToCompareWith":"83.136.249.129:7000",
-	"node": "localhost:8000",
+	"node": "localhost:7000",
     "delegate":"nameOfYourDelegate",
 	"secret":"superSecretPasswd",
 	"reloadTollerance":"(integer) Number of diff block tollerance",
