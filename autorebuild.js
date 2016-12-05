@@ -203,6 +203,7 @@ var checkReload = function() {
                 }
             }, function (err) {
                 console.log("[" + new Date().toString() + "] | " + err)
+                pauseReload = true;
                 exec.exec('bash ../lisk-test/lisk.sh start',function (error, stdout, stderr) {
                     console.log(stdout);
                     if (error !== null) {
