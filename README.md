@@ -9,6 +9,15 @@ It will also check if your blockchain is the sync compared to the higher one fou
 
 The file is a collection of your delegate node fork | autorebuild | forging events
 
+##Prereq
+
+    - git
+
+They should be installed with Lisk installation script
+
+    - nodejs / npm
+    - forever
+
 ##Install
 Clone the repository in the same directory of lisk installation folder, for instance:
 
