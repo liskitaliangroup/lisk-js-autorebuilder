@@ -207,7 +207,7 @@ var checkReload = function() {
                     pauseReload = true;
                     console.log("[" + new Date().toString() + "] | " + err)
                     console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
-                    exec.exec('bash ../lisk-test/lisk.sh start',function (error, stdout, stderr) {
+                    exec.exec('bash ../lisk-main/lisk.sh start',function (error, stdout, stderr) {
                         console.log(stdout);
                         if (error !== null) {
                             console.log('exec error: ' + error);
