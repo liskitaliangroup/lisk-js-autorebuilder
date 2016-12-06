@@ -148,9 +148,10 @@ var checkBlocks = function() {
                                         if (alerted [delegateList[i].address] == 1 || alerted [delegateList[i].address] % 180 == 0) {
                                             if (delegateList[i].username.indexOf(delegateMonitor)!== -1) {
                                                 // if is red rebuild and wait 30 min before rebuilding again
-                                                console.log("\n[" + new Date().toString() + "] | Asked to: " + nodeToUse);
-                                                console.log("[" + new Date().toString() + "] | Autorebuild started");
                                                 pauseReload = true;
+                                                console.log("\n[" + new Date().toString() + "] | Asked to: " + nodeToUse);
+                                                console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
+                                                console.log("[" + new Date().toString() + "] | Autorebuild started");
                                                 exec.exec('bash ../lisk-main/lisk.sh rebuild -u https://snapshot.lisknode.io',function (error, stdout, stderr) {
                                                     console.log(stdout);
                                                     if (error !== null) {
@@ -190,9 +191,10 @@ var checkReload = function() {
                 console.log("[" + new Date().toString() + "] | Your node height: " + res);
                 console.log("[" + new Date().toString() + "] | Diff height: " + (choosedNode - res) + "\n");
                 if((choosedNode - res)>=4) {
+                    pauseReload = true;
                     console.log("\n[" + new Date().toString() + "] | Height difference > 4");
                     console.log("[" + new Date().toString() + "] | Reload Lisk");
-                    pauseReload = true;
+                    console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
                     exec.exec('bash ../lisk-main/lisk.sh reload',function (error, stdout, stderr) {
                         console.log(stdout);
                         if (error !== null) {
@@ -201,8 +203,9 @@ var checkReload = function() {
                     });
                 }
             }, function (err) {
-                console.log("[" + new Date().toString() + "] | " + err)
                 pauseReload = true;
+                console.log("[" + new Date().toString() + "] | " + err)
+                console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
                 exec.exec('bash ../lisk-test/lisk.sh start',function (error, stdout, stderr) {
                     console.log(stdout);
                     if (error !== null) {
@@ -222,5 +225,6 @@ var checkReload = function() {
 checkBlocks ();
 setInterval (checkBlocks, 10000);
 
-if(pauseReload == false)
+if(pauseReload == false){
     setInterval (checkReload, (config.minutsOfCheckHeight * 60 * 1000));
+}
