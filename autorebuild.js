@@ -183,48 +183,49 @@ var checkBlocks = function() {
 };
 
 var checkReload = function() {
-    chooseNode().then(function(res) {
-        checklHeight(res).then(function(res) {
-            var choosedNode = res;
-            checklHeight(config.node).then(function(res) {
-                console.log("\n[" + new Date().toString() + "] | Checked node height: " + choosedNode);
-                console.log("[" + new Date().toString() + "] | Your node height: " + res);
-                console.log("[" + new Date().toString() + "] | Diff height: " + (choosedNode - res) + "\n");
-                if((choosedNode - res)>=4) {
+    if(pauseReload == false){
+        chooseNode().then(function(res) {
+            checklHeight(res).then(function(res) {
+                var choosedNode = res;
+                checklHeight(config.node).then(function(res) {
+                    console.log("\n[" + new Date().toString() + "] | Checked node height: " + choosedNode);
+                    console.log("[" + new Date().toString() + "] | Your node height: " + res);
+                    console.log("[" + new Date().toString() + "] | Diff height: " + (choosedNode - res) + "\n");
+                    if((choosedNode - res)>=4) {
+                        pauseReload = true;
+                        console.log("\n[" + new Date().toString() + "] | Height difference > 4");
+                        console.log("[" + new Date().toString() + "] | Reload Lisk");
+                        console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
+                        exec.exec('bash ../lisk-main/lisk.sh reload',function (error, stdout, stderr) {
+                            console.log(stdout);
+                            if (error !== null) {
+                                console.log('exec error: ' + error);
+                            }
+                        });
+                    }
+                }, function (err) {
                     pauseReload = true;
-                    console.log("\n[" + new Date().toString() + "] | Height difference > 4");
-                    console.log("[" + new Date().toString() + "] | Reload Lisk");
+                    console.log("[" + new Date().toString() + "] | " + err)
                     console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
-                    exec.exec('bash ../lisk-main/lisk.sh reload',function (error, stdout, stderr) {
+                    exec.exec('bash ../lisk-test/lisk.sh start',function (error, stdout, stderr) {
                         console.log(stdout);
                         if (error !== null) {
                             console.log('exec error: ' + error);
                         }
                     });
-                }
-            }, function (err) {
-                pauseReload = true;
-                console.log("[" + new Date().toString() + "] | " + err)
-                console.log("[" + new Date().toString() + "] | Pausing reload: " + pauseReload);
-                exec.exec('bash ../lisk-test/lisk.sh start',function (error, stdout, stderr) {
-                    console.log(stdout);
-                    if (error !== null) {
-                        console.log('exec error: ' + error);
-                    }
                 });
-            });
+            }, function (err) {
+                console.log("[" + new Date().toString() + "] | " + err)
+            })
         }, function (err) {
             console.log("[" + new Date().toString() + "] | " + err)
         })
-    }, function (err) {
-        console.log("[" + new Date().toString() + "] | " + err)
-    })
+    } else {
+        console.log("[" + new Date().toString() + "] | Reload is paused: " + pauseReload);
+    }
 }
 
 // run
 checkBlocks ();
 setInterval (checkBlocks, 10000);
-
-if(pauseReload == false){
-    setInterval (checkReload, (config.minutsOfCheckHeight * 60 * 1000));
-}
+setInterval (checkReload, (config.minutsOfCheckHeight * 60 * 1000));
