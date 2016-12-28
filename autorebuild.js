@@ -14,10 +14,12 @@ var rebuildString = 'Finished sync';
 
 // foring monitoring
 var alerted = {};
-var nodeToUse = '';
 var delegateMonitor = config.delegate;
 var pauseReload = false;
+
+var nodeToUse = config.node;
 var x = 0;
+var rejected = {};
 
 var postOptions = {
     uri: 'http://'+ config.node +'/api/delegates/forging/enable',
@@ -49,9 +51,13 @@ var chooseNode = function() {
                     if(data.peers[x].height == null){
                         x+=1
                     } else {
-                        checkNodeToUse = data.peers[x].ip + ':8000';
-                        x=0;
-                        break;
+                        if((data.peers[x].ip+':'+data.peers[x].port) in rejected) {
+                            x+=1
+                        } else {
+                            checkNodeToUse = data.peers[x].ip + ':8000';
+                            x=0;
+                            break;
+                        }
                     }
                 }
                 request('http://' + checkNodeToUse + '/api/peers?state=2&orderBy=height:desc', function (error, response, body) {
@@ -59,7 +65,8 @@ var chooseNode = function() {
                         nodeToUse = checkNodeToUse
                         resolve(nodeToUse);
                     } else {
-                        reject('Node dropped ' + checkNodeToUse);
+                        rejected[checkNodeToUse] = true;
+                        resolve('nodeToUse not changed | nodeDropped ' + checkNodeToUse);
                     }
                 });
             } else {
