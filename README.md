@@ -1,6 +1,6 @@
 #Lisk Anti-Stuck in js
 
-With love by liskit delegate, for donation 10310263204519541551L
+###With love by liskit delegate, for donation 10310263204519541551L
 
 **** NOT USE IT BEFORE YOU ARE GREEN AND ALREDY FORGING ****
 
