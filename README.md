@@ -1,7 +1,8 @@
 #Lisk Anti-Stuck in js
-**** NOT USE IT BEFORE YOU ARE GREEN AND ALREDY FORGING ****
 
 With love by liskit delegate, for donation 10310263204519541551L
+
+**** NOT USE IT BEFORE YOU ARE GREEN AND ALREDY FORGING ****
 
 The script will check if your delegate is forging, if not it will rebuild with last available snapshot and activate the forging ones the sync is completed.
 
