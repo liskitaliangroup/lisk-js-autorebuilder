@@ -2,9 +2,9 @@
 
 ###With love by liskit delegate, for donation 10310263204519541551L
 
-**** NOT USE IT BEFORE YOU ARE GREEN AND ALREDY FORGING ****
-
 The script will check if your delegate is forging, if not it will rebuild with last available snapshot and activate the forging ones the sync is completed.
+
+Run it when you are already green in the delegate monitor and you are already forging.
 
 It will also check if your blockchain is the sync compared to the higher one found. If is not sync the script will reload Lisk.
 
