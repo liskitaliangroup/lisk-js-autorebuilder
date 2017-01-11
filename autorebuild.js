@@ -192,7 +192,7 @@ var checkBlocks = function() {
 var checkReload = function() {
     if(pauseReload == false){
         chooseNode().then(function(res) {
-            checklHeight(res).then(function(res) {
+            checklHeight(nodeToUse).then(function(res) {
                 var choosedNode = res;
                 checklHeight(config.node).then(function(res) {
                     console.log("\n[" + new Date().toString() + "] | Checked node height: " + choosedNode);
